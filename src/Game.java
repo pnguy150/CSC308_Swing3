@@ -5,13 +5,45 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game extends JFrame implements ActionListener, KeyListener {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+    private Maze maze;
+    private Pacman pacman;
+    private Ghost ghost;
+
+    public Game() {
+        pacman = new Pacman();
+        ghost = new Ghost();
+        maze = new Maze(pacman, ghost);
+        this.getContentPane().add(maze);
+        this.addKeyListener(this);
+    }
+
+    public void startTimer() {
+        Timer timer = new Timer(100, this);
+        timer.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        maze.repaint();
+    }
 
+    public static void main(String [] args) {
+        Game win = new Game();
+        win.setSize(500, 500);
+        win.setVisible(true);
+        win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        win.startTimer();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP -> pacman.up();
+            case KeyEvent.VK_DOWN -> pacman.down();
+            case KeyEvent.VK_LEFT -> pacman.left();
+            case KeyEvent.VK_RIGHT -> pacman.right();
+        }
     }
 
     @Override
@@ -24,8 +56,4 @@ public class Game extends JFrame implements ActionListener, KeyListener {
 
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 }
